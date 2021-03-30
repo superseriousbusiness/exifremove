@@ -1,4 +1,4 @@
-module github.com/superseriousbusiness/go-exif-remove
+module github.com/superseriousbusiness/exifremove
 
 go 1.16
 
