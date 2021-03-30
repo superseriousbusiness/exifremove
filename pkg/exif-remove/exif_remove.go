@@ -132,6 +132,8 @@ func Remove(data []byte) ([]byte, error) {
 		if err != nil {
 			return nil, errors.New("EXIF removal corrupted " + err.Error())
 		}
+	default:
+		return nil, errors.New("filetype not recognised")
 	}
 
 	return filtered, nil
