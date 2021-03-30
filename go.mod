@@ -1,4 +1,4 @@
-module github.com/scottleedavis/go-exif-remove
+module github.com/superseriousbusiness/go-exif-remove
 
 go 1.12
 
@@ -10,6 +10,7 @@ require (
 	github.com/dsoprea/go-png-image-structure v0.0.0-20190624104353-c9b28dcdc5c8
 	github.com/go-errors/errors v1.0.1 // indirect
 	github.com/golang/geo v0.0.0-20190812012225-f41920e961ce // indirect
+	github.com/h2non/filetype v1.1.1
 	github.com/kr/pretty v0.1.0 // indirect
 	github.com/stretchr/testify v1.4.0
 	golang.org/x/net v0.0.0-20190827160401-ba9fcec4b297 // indirect

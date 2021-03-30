@@ -4,12 +4,14 @@ import (
 	"bytes"
 	"encoding/binary"
 	"errors"
+	"fmt"
 	"image/jpeg"
 	"image/png"
 
 	"github.com/dsoprea/go-exif"
-	"github.com/dsoprea/go-jpeg-image-structure"
-	"github.com/dsoprea/go-png-image-structure"
+	jpegstructure "github.com/dsoprea/go-jpeg-image-structure"
+	pngstructure "github.com/dsoprea/go-png-image-structure"
+	"github.com/h2non/filetype"
 )
 
 func Remove(data []byte) ([]byte, error) {
@@ -29,12 +31,21 @@ func Remove(data []byte) ([]byte, error) {
 		Media     interface{}
 	}
 
-	jmp := jpegstructure.NewJpegMediaParser()
-	pmp := pngstructure.NewPngMediaParser()
 	filtered := []byte{}
 
-	if jmp.LooksLikeFormat(data) {
+	head := make([]byte, 261)
+	_, err := bytes.NewReader(data).Read(head)
+	if err != nil {
+		return nil, fmt.Errorf("could not read first 261 bytes of data: %s", err)
+	}
+	imagetype, err := filetype.Match(head)
+	if err != nil {
+		return nil, fmt.Errorf("error matching first 261 bytes of image to valid type: %s", err)
+	}
 
+	switch imagetype.MIME.Subtype {
+	case "jpeg":
+		jmp := jpegstructure.NewJpegMediaParser()
 		sl, err := jmp.ParseBytes(data)
 		if err != nil {
 			return nil, err
@@ -66,9 +77,8 @@ func Remove(data []byte) ([]byte, error) {
 		if err != nil {
 			return nil, errors.New("EXIF removal corrupted " + err.Error())
 		}
-
-	} else if pmp.LooksLikeFormat(data) {
-
+	case "png":
+		pmp := pngstructure.NewPngMediaParser()
 		cs, err := pmp.ParseBytes(data)
 		if err != nil {
 			return nil, err
@@ -122,7 +132,6 @@ func Remove(data []byte) ([]byte, error) {
 		if err != nil {
 			return nil, errors.New("EXIF removal corrupted " + err.Error())
 		}
-
 	}
 
 	return filtered, nil

@@ -11,7 +11,7 @@ import (
 
 func TestRemove(t *testing.T) {
 
-	data, err := ioutil.ReadFile("exif-remove-tool/img/jpg/11-tests.jpg")
+	data, err := ioutil.ReadFile("../../test-images/jpg/11-tests.jpg")
 	assert.Nil(t, err)
 	filtered, err := Remove(data)
 	assert.Nil(t, err)
@@ -20,7 +20,7 @@ func TestRemove(t *testing.T) {
 	_, _, err = sl.Exif()
 	assert.NotNil(t, err)
 
-	data, err = ioutil.ReadFile("exif-remove-tool/img/png/exif.png")
+	data, err = ioutil.ReadFile("../../test-images/png/exif.png")
 	assert.Nil(t, err)
 	filtered, err = Remove(data)
 	assert.Nil(t, err)
